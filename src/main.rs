@@ -7,7 +7,7 @@ use crate::colors::Palette;
 use nannou::prelude::Frame;
 use nannou::prelude::*;
 
-use clap::{Parser};
+use clap::Parser;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -27,11 +27,10 @@ struct Cli {
     fraction: f32,
     #[arg(default_value_t=LENGTH_FRAME)]
     frame: u64,
-    #[arg(default_value_t=1024)]
+    #[arg(default_value_t = 1024)]
     wxsize: u32,
-    #[arg(default_value_t=1024)]
+    #[arg(default_value_t = 1024)]
     wysize: u32,
-
 }
 
 const LENGTH_FRAME: u64 = 700;
@@ -40,7 +39,6 @@ const LENGTH_FRAME: u64 = 700;
 fn main() {
     nannou::app(model).update(update).exit(exit).run();
 }
-
 
 struct Model {
     palette: Palette,
@@ -106,7 +104,6 @@ impl Thing {
 }
 
 fn model(app: &App) -> Model {
-
     let cli = Cli::parse();
 
     println!("prob: {:?}", cli.prob);
@@ -138,7 +135,7 @@ fn model(app: &App) -> Model {
         palette: palette,
         things,
         fade: cli.fade,
-        prob : cli.prob,
+        prob: cli.prob,
         frame: cli.frame,
         save: false,
         wxsize: cli.wxsize,
@@ -169,8 +166,12 @@ fn window_event(_app: &App, model: &mut Model, event: WindowEvent) {
         HoveredFileCancelled => {}
         Focused => {}
         Unfocused => {}
-        Closed => { println!("bye!"); }
-        _ => { println!("unknown event to me!"); }
+        Closed => {
+            println!("bye!");
+        }
+        _ => {
+            println!("unknown event to me!");
+        }
     }
 }
 
@@ -367,12 +368,11 @@ fn view(app: &App, model: &Model, frame: Frame) {
     draw.to_frame(app, &frame).unwrap();
     //
     // add screenshot
-    if model.save == true {
+    if model.save {
         let file_path = captured_frame_path(app, &frame);
         println!("writing {:?} frame: {:?}", file_path.clone(), frame.nth());
         app.main_window().capture_frame(file_path);
     }
-
 }
 
 fn captured_frame_path(app: &App, frame: &Frame) -> std::path::PathBuf {
